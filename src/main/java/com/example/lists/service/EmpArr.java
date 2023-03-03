@@ -13,7 +13,7 @@ public class EmpArr {
     //КОЛ-ВО СОТРУДНИКОВ В МАССИВЕ
     private static int size;
     //ОБЪЯВЛНИЕ ЛИСТА
-    static List<Employee> employeeList = new ArrayList<>(List.of());
+    static List<Employee> employeeList = new ArrayList<Employee>();
 
     //МЕТОД УДАЛЕНИЯ СОТРУДНИКА ИЗ МАССИВА
     public static String delEmployee(String firstName, String lastName) {
@@ -49,13 +49,13 @@ public class EmpArr {
         if (size >= 10) {
             throw new EmployeeStorageIsFullException("Массив переполнен");
         }
-        for (int i = 0; i < size + 1; i++) {
+        for (int i = 0; i < size; i++) {
 
             if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
                 throw new EmployeeAlreadyAddedException("Такой сотрдник уже есть");
             }
         }
-        employeeList.set(size++, new Employee(firstName, lastName));
+        employeeList.add(size++, new Employee(firstName, lastName));
         return "Сотрудник добавлен";
 
 
