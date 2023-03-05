@@ -3,66 +3,54 @@ package com.example.lists.service;
 import com.example.lists.exception.EmployeeAlreadyAddedException;
 import com.example.lists.exception.EmployeeNotFoundException;
 import com.example.lists.exception.EmployeeStorageIsFullException;
+import com.example.lists.object.Employee;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class EmployeeService {
+    private final int MAX_COUNT_OF_EMPLOYEE = 10;
     //КОЛ-ВО СОТРУДНИКОВ В МАССИВЕ
     private static int size;
     //ОБЪЯВЛНИЕ ЛИСТА
-    static List<Employee> employeeList = new ArrayList<Employee>();
+    List<Employee> employeeList = new ArrayList<Employee>();
 
     //МЕТОД УДАЛЕНИЯ СОТРУДНИКА ИЗ МАССИВА
-    public static String delEmployee(String firstName, String lastName) {
-        boolean test = false;
-        for (int i = 0; i < size; i++) {
-            if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
-                test = true;
-                employeeList.set(i, null);
-                if (i == size - 1) {
-                    size--;
-                    break;
-                } else {
-                    for (int j = i; j < size - 1; j++) {
-                        employeeList.set(j, employeeList.get(j + 1));
-                    }
-                    size--;
-                    break;
-                }
-            }
-        }
-        if (test == false) {
+    public Employee delEmployee(String firstName, String lastName) {
+        Employee employee = new Employee(firstName, lastName);
+        if(employeeList.contains(employee)){
+            employeeList.remove(employee);
+            size--;
+            return employee;
+        }else {
             throw new EmployeeNotFoundException("Сотрудник не найден");
-        } else {
-            return "Сотрудник удалён";
         }
-
     }
 
     //МЕТОД ДОБАВЛЕНИЯ СОТРУДНИКА ИЗ МАССИВА
-    public static Employee addEmployee(String firstName, String lastName) {
-        boolean test = false;
-
-        if (size >= 10) {
+    public Employee addEmployee(String firstName, String lastName) {
+        if (size >= MAX_COUNT_OF_EMPLOYEE) {
             throw new EmployeeStorageIsFullException("Массив переполнен");
         }
-        for (int i = 0; i < size; i++) {
-
-            if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
-                throw new EmployeeAlreadyAddedException("Такой сотрдник уже есть");
-            }
+        Employee employee = new Employee(firstName,lastName);
+        if (employeeList.contains(employee)){
+            throw new EmployeeAlreadyAddedException("Сотрудник уже добавлен");
         }
-        employeeList.add(size++, new Employee(firstName, lastName));
-        return new Employee(firstName,lastName);
+        size++;
+
+        employeeList.add(employee);
+
+        return employee;
 
 
     }
 
     //МЕТОД ПОИСКА СОТРУДНИКА В МАССИВА
-    public static Employee searchArr(String firstName, String lastName) {
+    public Employee find(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
         if (employeeList.contains(employee)){
             return employee;
@@ -71,16 +59,7 @@ public class EmployeeService {
         }
     }
 
-    public static List<Employee> showAllArr() {
-        StringBuilder arrStringBuilder = new StringBuilder("");
-        for (int i = 0; i < size; i++) {
-            arrStringBuilder.append(employeeList.get(i).toString() + "\n");
-        }
-
-        String arrString = String.valueOf(arrStringBuilder);
-        if (arrString.isBlank()) {
-            throw new EmployeeNotFoundException("Сотрудники не найдены");
-        }
-        return employeeList;
+    public Collection<Employee> showAllArr() {
+        return Collections.unmodifiableList(employeeList);
     }
 }
