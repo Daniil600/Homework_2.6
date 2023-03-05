@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EmpArr {
+public class EmployeeService {
     //КОЛ-ВО СОТРУДНИКОВ В МАССИВЕ
     private static int size;
     //ОБЪЯВЛНИЕ ЛИСТА
@@ -43,7 +43,7 @@ public class EmpArr {
     }
 
     //МЕТОД ДОБАВЛЕНИЯ СОТРУДНИКА ИЗ МАССИВА
-    public static String addEmployee(String firstName, String lastName) {
+    public static Employee addEmployee(String firstName, String lastName) {
         boolean test = false;
 
         if (size >= 10) {
@@ -56,17 +56,18 @@ public class EmpArr {
             }
         }
         employeeList.add(size++, new Employee(firstName, lastName));
-        return "Сотрудник добавлен";
+        return new Employee(firstName,lastName);
 
 
     }
 
     //МЕТОД ПОИСКА СОТРУДНИКА В МАССИВА
-    public static String searchArr(String firstName, String lastName) {
+    public static Employee searchArr(String firstName, String lastName) {
         boolean test = false;
         int index = 0;
         for (int i = 0; i < size; i++) {
             if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
+                test = true;
                 index = i;
                 break;
             }
@@ -74,20 +75,20 @@ public class EmpArr {
         if (test == false) {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         } else {
-            return employeeList.get(index).getFirstName() + " " + employeeList.get(index).getLastName();
+            return employeeList.get(index);
         }
     }
 
-    public static String showAllArr() {
+    public static List<Employee> showAllArr() {
         StringBuilder arrStringBuilder = new StringBuilder("");
         for (int i = 0; i < size; i++) {
-            arrStringBuilder.append(employeeList.get(i).getFirstName() + " " + employeeList.get(i).getLastName() + "\n");
+            arrStringBuilder.append(employeeList.get(i).toString() + "\n");
         }
 
         String arrString = String.valueOf(arrStringBuilder);
         if (arrString.isBlank()) {
-            return "Список пуст";
+            throw new EmployeeNotFoundException("Сотрудники не найдены");
         }
-        return arrString;
+        return employeeList;
     }
 }
