@@ -63,19 +63,11 @@ public class EmployeeService {
 
     //МЕТОД ПОИСКА СОТРУДНИКА В МАССИВА
     public static Employee searchArr(String firstName, String lastName) {
-        boolean test = false;
-        int index = 0;
-        for (int i = 0; i < size; i++) {
-            if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
-                test = true;
-                index = i;
-                break;
-            }
-        }
-        if (test == false) {
+        Employee employee = new Employee(firstName, lastName);
+        if (employeeList.contains(employee)){
+            return employee;
+        }else {
             throw new EmployeeNotFoundException("Сотрудник не найден");
-        } else {
-            return employeeList.get(index);
         }
     }
 
