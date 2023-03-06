@@ -19,7 +19,7 @@ public class EmployeeController {
     }
     @GetMapping
     public Collection<Employee> hello(){
-        return employeeService.showAllArr();
+        return employeeService.showAll();
     }
     @GetMapping(path = "/add")
     public Employee add(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName){

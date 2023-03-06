@@ -59,7 +59,7 @@ public class EmployeeService {
         }
     }
 
-    public Collection<Employee> showAllArr() {
+    public Collection<Employee> showAll() {
         return Collections.unmodifiableList(employeeList);
     }
 }
