@@ -21,15 +21,18 @@ public class EmployeeController {
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
-
-    @ExceptionHandler({EmployeeAlreadyAddedException.class, EmployeeStorageIsFullException.class, EmployeeNotFoundException.class})
-    public String handleException(EmployeeStorageIsFullException e){
-        return String.format("%s %s", HttpStatus.NOT_FOUND.value(), e.getMessage());
-    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EmployeeAlreadyAddedException.class)
     public String handleException(EmployeeAlreadyAddedException e){
         return String.format("%s %s", HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
+
+    @ExceptionHandler(EmployeeNotFoundException.class)
     public String handleException(EmployeeNotFoundException e){
+        return String.format("%s %s", HttpStatus.NOT_FOUND.value(), e.getMessage());
+    }
+    @ExceptionHandler(EmployeeStorageIsFullException.class)
+    public String handleException(EmployeeStorageIsFullException e){
         return String.format("%s %s", HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
     @GetMapping
