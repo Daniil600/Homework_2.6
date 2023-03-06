@@ -1,6 +1,4 @@
-package com.example.lists.service;
-
-import org.springframework.stereotype.Service;
+package com.example.lists.object;
 
 import java.util.Objects;
 
