@@ -25,12 +25,18 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
+        if (employee.hashCode() != this.hashCode()){
+            return false;
+        }
         return Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        int result1 = firstName == null ? 0 : firstName.hashCode();
+        int result2 = lastName == null ? 0 : lastName.hashCode();
+        int result = 31 * result1 + result2;
+        return result;
     }
 
     @Override
