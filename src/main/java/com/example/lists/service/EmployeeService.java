@@ -6,44 +6,34 @@ import com.example.lists.exception.EmployeeStorageIsFullException;
 import com.example.lists.object.Employee;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EmployeeService {
     private final int MAX_COUNT_OF_EMPLOYEE = 10;
-    //КОЛ-ВО СОТРУДНИКОВ В МАССИВЕ
-    private static int size;
-    //ОБЪЯВЛНИЕ ЛИСТА
-    List<Employee> employeeList = new ArrayList<Employee>();
+    Map<String, Employee> employees = new HashMap<>();
 
     //МЕТОД УДАЛЕНИЯ СОТРУДНИКА ИЗ МАССИВА
     public Employee delEmployee(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if(employeeList.contains(employee)){
-            employeeList.remove(employee);
-            size--;
+        if (employees.containsKey(employee.getFirstName() + " " + employee.getLastName())) {
+            employees.remove(employee);
             return employee;
-        }else {
+        } else {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
     }
 
     //МЕТОД ДОБАВЛЕНИЯ СОТРУДНИКА ИЗ МАССИВА
     public Employee addEmployee(String firstName, String lastName) {
-        if (size >= MAX_COUNT_OF_EMPLOYEE) {
+        if (employees.size() >= MAX_COUNT_OF_EMPLOYEE) {
             throw new EmployeeStorageIsFullException("Массив переполнен");
         }
-        Employee employee = new Employee(firstName,lastName);
-        if (employeeList.contains(employee)){
+        Employee employee = new Employee(firstName, lastName);
+        if (employees.containsKey(employee.getFirstName() + " " + employee.getLastName())) {
             throw new EmployeeAlreadyAddedException("Сотрудник уже добавлен");
         }
-        size++;
-
-        employeeList.add(employee);
-
+        employees.put(employee.getFirstName() + " " + employee.getLastName(), employee);
         return employee;
 
 
@@ -52,14 +42,14 @@ public class EmployeeService {
     //МЕТОД ПОИСКА СОТРУДНИКА В МАССИВА
     public Employee find(String firstName, String lastName) {
         Employee employee = new Employee(firstName, lastName);
-        if (employeeList.contains(employee)){
+        if (employees.containsKey(employee.getFirstName() + " " + employee.getLastName())) {
             return employee;
-        }else {
+        } else {
             throw new EmployeeNotFoundException("Сотрудник не найден");
         }
     }
 
     public Collection<Employee> showAll() {
-        return Collections.unmodifiableList(employeeList);
+        return Collections.unmodifiableCollection(employees.values());
     }
 }
