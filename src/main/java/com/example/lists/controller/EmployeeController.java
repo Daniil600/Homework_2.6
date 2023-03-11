@@ -40,8 +40,11 @@ public class EmployeeController {
         return employeeService.showAll();
     }
     @GetMapping(path = "/add")
-    public Employee add(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName){
-        return employeeService.addEmployee(firstName, lastName);
+    public Employee add(@RequestParam(name = "firstName") String firstName,
+                        @RequestParam(name = "lastName") String lastName,
+                        @RequestParam(name = "sallary") int sallary,
+                        @RequestParam(name = "departament") int departament){
+        return employeeService.addEmployee(firstName, lastName, sallary, departament);
     }
     @GetMapping(path = "/remove")
     public Employee del(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName){
@@ -51,5 +54,24 @@ public class EmployeeController {
     public Employee find(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName){
         return employeeService.find(firstName,lastName);
     }
+    @GetMapping(path = "/departments/maxsalary")
+    public Employee maxSalary(@RequestParam(name = "dep")int department){
+        return employeeService.findMaxSallary(department);
+    }
+
+    @GetMapping(path = "/departments/minsalary")
+    public Employee minSalary(@RequestParam(name = "dep")int department){
+        return employeeService.findMinSalary(department);
+    }
+    @GetMapping(path = "/departments/allofone")
+    public Collection<Employee> allDep(@RequestParam(name = "dep")int department){
+        return employeeService.allOfOneDepartment(department);
+    }
+
+    @GetMapping(path = "/departments/all")
+    public Collection<Employee> allDep(){
+        return employeeService.showAllDepartment();
+    }
+
 
 }
